@@ -4,19 +4,55 @@ from domain.common import Side
 
 
 class Board:
-    def __init__(self, side: Side = Side.WHITE):
+    def __init__(self, side: Side = Side.WHITE, state=None):
         self._cells = {}
         self._size = (8, 8)
-        self.score = {
-            side: 0,
-            Side.opposite(side): 0
+        self.eaten = {
+            side: [],
+            Side.opposite(side): []
         }
+
         self.side = side
 
         self.__place_row((0, 6), [Pawn] * 8, side)
-        self.__place_row((0, 7), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], side)
-        self.__place_row((0, 1), [Pawn] * 8, side)
-        self.__place_row((0, 0), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], side)
+        self.__place_row((0, 1), [Pawn] * 8, Side.opposite(side))
+
+        if side == Side.WHITE:
+            self.__place_row((0, 0), [Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook], Side.opposite(side))
+            self.__place_row((0, 7), [Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook], side)
+        else:
+            self.__place_row((0, 0), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], Side.opposite(side))
+            self.__place_row((0, 7), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], side)
+
+    def __load_state(self, state: str):
+        rows = state.split()
+
+        if len(rows) != 8:
+            raise Exception("Incorrect template")
+
+        for row in rows:
+            if len(row) != 8:
+                raise Exception("Incorrect template")
+
+        figure_classes = {
+            "r": Rook,
+            "h": Knight,
+            "b": Bishop,
+            "k": King,
+            "q": Queen,
+            "p": Pawn
+        }
+
+        for j in range(len(rows)):
+            row = rows[j]
+            for i in range(len(row)):
+                f = row[i]
+                if f == ' ':
+                    continue
+                if f.isupper():
+                    self.__set((i, j), figure_classes[f.lower()](Side.WHITE))
+                else:
+                    self.__set((i, j), figure_classes[f.lower()](Side.BLACK))
 
     def __set(self, position, figure):
         i, j = position
@@ -26,9 +62,11 @@ class Board:
 
         self._cells[position] = figure
 
-    def __is_black(self, point):
-        i, j = point
-        return (i + j) % 2 == 1
+    def get_color(self, point):
+        if sum(point) % 2 == 0:
+            return Side.WHITE
+        else:
+            return Side.BLACK
 
     def __place_row(self, start, figures, side):
         for i in range(start[0], start[0] + len(figures)):
@@ -41,15 +79,14 @@ class Board:
             return False
         return True
 
-    def get(self, point) -> Optional[Figure]:
+    def get(self, point):
         if not self.point_available(point):
             raise Exception("Point is outside of filed")
         if point in self._cells:
             return self._cells[point]
         else:
             return None
-    # ход может состоять из нескольких клеток
-    # результаты: нельзя, ход незавершен, ход завершен
+
     def move(self, start, end):
         if not self.point_available(start) or not self.point_available(end):
             return False
@@ -58,26 +95,25 @@ class Board:
         if not figure:
             return False
 
-        attacked_points = figure.move(start, end, self)
-        if attacked_points is None:
+        if not figure.can_move(start, end, self):
             return False
 
+        figure.moved(start, end, self)
         self.__set(start, None)
 
-        for point in attacked_points:
-            self.__set(point, None)
-            self.score[side] += 1
+        if self.get(end):
+           self.eaten[figure.side].append(self.get(end))
 
         self.__set(end, figure)
 
     def __repr__(self):
-        print()
+        result = ""
         for j in range(self.height):
             for i in range(self.width):
-                figure = ' ' if not self.get(i, j) else self.get(i, j)
-                print(figure, '|', end='')
-            print()
-            print('---' * self.width)
+                s = ' ' if not self.get((i, j)) else self.get((i, j)).__repr__()
+                result += s
+            result += '\n'
+        return result
 
     @property
     def width(self):
