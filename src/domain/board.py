@@ -2,6 +2,28 @@ from typing import Optional, Tuple
 from domain.figures import *
 from domain.common import Side
 
+DEFAULT_WHITE = """
+rhbqkbhr
+pppppppp
+________
+________
+________
+________
+PPPPPPPP
+RHBQKBHR
+"""
+
+DEFAULT_BLACK = """
+RHBKQBHR
+PPPPPPPP
+________
+________
+________
+________
+pppppppp
+rhbkqbhr
+"""
+
 
 class Board:
     def __init__(self, side: Side = Side.WHITE, state=None):
@@ -14,25 +36,20 @@ class Board:
 
         self.side = side
 
-        self.__place_row((0, 6), [Pawn] * 8, side)
-        self.__place_row((0, 1), [Pawn] * 8, Side.opposite(side))
-
-        if side == Side.WHITE:
-            self.__place_row((0, 0), [Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook], Side.opposite(side))
-            self.__place_row((0, 7), [Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook], side)
+        if state:
+            self.__load_state(state)
         else:
-            self.__place_row((0, 0), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], Side.opposite(side))
-            self.__place_row((0, 7), [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook], side)
+            if side == Side.WHITE:
+                self.__load_state(DEFAULT_WHITE)
+            else:
+                self.__load_state(DEFAULT_BLACK)
 
     def __load_state(self, state: str):
-        rows = state.split()
+        rows = state.strip('\n').split()
+        print(rows)
 
         if len(rows) != 8:
             raise Exception("Incorrect template")
-
-        for row in rows:
-            if len(row) != 8:
-                raise Exception("Incorrect template")
 
         figure_classes = {
             "r": Rook,
@@ -47,7 +64,7 @@ class Board:
             row = rows[j]
             for i in range(len(row)):
                 f = row[i]
-                if f == ' ':
+                if f == '_':
                     continue
                 if f.isupper():
                     self.__set((i, j), figure_classes[f.lower()](Side.WHITE))
@@ -67,11 +84,6 @@ class Board:
             return Side.WHITE
         else:
             return Side.BLACK
-
-    def __place_row(self, start, figures, side):
-        for i in range(start[0], start[0] + len(figures)):
-            figure = figures.pop()
-            self.__set((i, start[1]), figure(side))
 
     def point_available(self, point):
         i, j = point
@@ -102,7 +114,7 @@ class Board:
         self.__set(start, None)
 
         if self.get(end):
-           self.eaten[figure.side].append(self.get(end))
+            self.eaten[figure.side].append(self.get(end))
 
         self.__set(end, figure)
 
@@ -110,7 +122,7 @@ class Board:
         result = ""
         for j in range(self.height):
             for i in range(self.width):
-                s = ' ' if not self.get((i, j)) else self.get((i, j)).__repr__()
+                s = '_' if not self.get((i, j)) else self.get((i, j)).__repr__()
                 result += s
             result += '\n'
         return result

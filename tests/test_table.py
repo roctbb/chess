@@ -8,10 +8,10 @@ def test_white():
 
     expected = """rhbqkbhr
 pppppppp
-        
-        
-        
-        
+________
+________
+________
+________
 PPPPPPPP
 RHBQKBHR
 """
@@ -36,10 +36,10 @@ def test_black():
 
     expected = """RHBKQBHR
 PPPPPPPP
-        
-        
-        
-        
+________
+________
+________
+________
 pppppppp
 rhbkqbhr
 """
