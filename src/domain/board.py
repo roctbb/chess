@@ -104,6 +104,9 @@ class Board:
         if not self.point_available(start) or not self.point_available(end):
             return False
 
+        if start == end:
+            return False
+
         figure = self.get(start)
         if not figure:
             return False
