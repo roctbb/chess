@@ -34,6 +34,7 @@ class Board:
             Side.opposite(side): []
         }
 
+        self.current_turn = side
         self.side = side
 
         if state:
@@ -107,18 +108,25 @@ class Board:
         if not figure:
             return False
 
+        if figure.side != self.current_turn:
+            return False
+
         if not figure.can_move(start, end, self):
             return False
 
         figure.moved(start, end, self)
         self.__set(start, None)
 
-        if self.get(end):
-            self.eaten[figure.side].append(self.get(end))
+        enemy = self.get(end)
+        if enemy:
+            self.eaten[enemy.side].append(enemy)
 
         self.__set(end, figure)
+        self.current_turn = Side.opposite(self.current_turn)
 
-    def __repr__(self):
+        return True
+
+    def get_state(self):
         result = ""
         for j in range(self.height):
             for i in range(self.width):

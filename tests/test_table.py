@@ -6,7 +6,8 @@ from domain.board import Board, Side
 def test_white():
     board = Board(Side.WHITE)
 
-    expected = """rhbqkbhr
+    expected = """
+rhbqkbhr
 pppppppp
 ________
 ________
@@ -16,7 +17,7 @@ PPPPPPPP
 RHBQKBHR
 """
 
-    assert board.__repr__() == expected
+    assert board.get_state().strip('\n') == expected.strip('\n')
 
     with pytest.raises(Exception):
         board.get((0, -1))
@@ -34,7 +35,8 @@ RHBQKBHR
 def test_black():
     board = Board(Side.BLACK)
 
-    expected = """RHBKQBHR
+    expected = """
+RHBKQBHR
 PPPPPPPP
 ________
 ________
@@ -43,7 +45,7 @@ ________
 pppppppp
 rhbkqbhr
 """
-    assert board.__repr__() == expected
+    assert board.get_state().strip('\n') == expected.strip('\n')
 
     with pytest.raises(Exception):
         board.get((0, -1))
@@ -56,3 +58,11 @@ rhbkqbhr
 
     with pytest.raises(Exception):
         board.get((0, 8))
+
+def test_sequental_moves():
+    board = Board(Side.WHITE)
+    assert board.move((0, 6), (0, 5)) == True
+    assert board.move((0, 5), (0, 4)) == False
+    assert board.move((0, 1), (0, 2)) == True
+    assert board.move((0, 2), (0, 3)) == False
+    assert board.move((0, 5), (0, 4)) == True
