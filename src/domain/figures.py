@@ -60,6 +60,7 @@ class Pawn(Figure):
 
 
 class Rook(Figure):
+    #ЛАДИЯ
     def __init__(self, side: Side):
         super().__init__(side)
 
@@ -70,10 +71,24 @@ class Rook(Figure):
         pass
 
     def can_move(self, start, end, board):
-        pass
-
+        if start[0] == end[0]:
+            if start[1] > end[1]:
+                for i in range(end[1], start[1]):
+                    if board.get([start[0], i]) != None: return False
+            elif start[1] < end[1]:
+                for i in range(start[1], end[1]):
+                    if board.get([start[0], i]) != None: return False
+        elif start[1] == end[1]:
+            if start[0] > end[0]:
+                for i in range(end[0], start[0]):
+                    if board.get([start[1], i]) != None: return False
+            elif start[0] < end[0]:
+                for i in range(start[0], end[0]):
+                    if board.get([start[1], i]) != None: return False
+        return True
 
 class Bishop(Figure):
+    #Слон
     def __init__(self, side: Side):
         super().__init__(side)
 
@@ -88,6 +103,7 @@ class Bishop(Figure):
 
 
 class Knight(Figure):
+    #Лошаодь
     def __init__(self, side: Side):
         super().__init__(side)
 
