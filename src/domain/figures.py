@@ -1,11 +1,11 @@
 import abc
 from typing import Tuple
-from domain.common import Side
+from domain.common import Color
 
 
 class Figure:
-    def __init__(self, side: Side):
-        self.side = side
+    def __init__(self, color: Color):
+        self.color = color
 
     @abc.abstractmethod
     def can_move(self, start, end, board):
@@ -19,20 +19,20 @@ class Figure:
         raise NotImplementedError
 
     def _colorise(self, s):
-        if self.side == Side.WHITE:
+        if self.color == Color.WHITE:
             return s.upper()
         return s
 
     def _direction(self, board):
-        if self.side == board.side:
+        if self.color == board.color:
             return -1
         else:
             return 1
 
 
 class Pawn(Figure):
-    def __init__(self, side: Side):
-        super().__init__(side)
+    def __init__(self, color: Color):
+        super().__init__(color)
         self.__is_moved = False
 
     def can_move(self, start, end, board):
@@ -47,7 +47,7 @@ class Pawn(Figure):
                 return True
         # косой ход
         if abs(start[0] - end[0]) == 1 and abs(start[1] - end[1]) == 1:
-            if board.get(end) is not None and board.get(end).side != self.side:
+            if board.get(end) is not None and board.get(end).color != self.color:
                 return True
 
         return False
@@ -60,9 +60,9 @@ class Pawn(Figure):
 
 
 class Rook(Figure):
-    #ЛАДИЯ
-    def __init__(self, side: Side):
-        super().__init__(side)
+    # ЛАДИЯ
+    def __init__(self, color: Color):
+        super().__init__(color)
 
     def __repr__(self):
         return self._colorise("r")
@@ -73,24 +73,31 @@ class Rook(Figure):
     def can_move(self, start, end, board):
         if start[0] == end[0]:
             if start[1] > end[1]:
-                for i in range(end[1], start[1]):
-                    if board.get([start[0], i]) != None: return False
+                for i in range(end[1] + 1, start[1]):
+                    if board.get((start[0], i)) != None:
+                        return False
             elif start[1] < end[1]:
-                for i in range(start[1], end[1]):
-                    if board.get([start[0], i]) != None: return False
+                for i in range(start[1], end[1] - 1):
+                    if board.get((start[0], i)) != None:
+                        return False
+            return True
         elif start[1] == end[1]:
             if start[0] > end[0]:
-                for i in range(end[0], start[0]):
-                    if board.get([start[1], i]) != None: return False
+                for i in range(end[0] + 1, start[0]):
+                    if board.get((start[1], i)) != None:
+                        return False
             elif start[0] < end[0]:
-                for i in range(start[0], end[0]):
-                    if board.get([start[1], i]) != None: return False
-        return True
+                for i in range(start[0], end[0] - 1):
+                    if board.get((start[1], i)) != None:
+                        return False
+            return True
+        return False
+
 
 class Bishop(Figure):
-    #Слон
-    def __init__(self, side: Side):
-        super().__init__(side)
+    # Слон
+    def __init__(self, color: Color):
+        super().__init__(color)
 
     def __repr__(self):
         return self._colorise("b")
@@ -103,9 +110,9 @@ class Bishop(Figure):
 
 
 class Knight(Figure):
-    #Лошаодь
-    def __init__(self, side: Side):
-        super().__init__(side)
+    # Лошаодь
+    def __init__(self, color: Color):
+        super().__init__(color)
 
     def __repr__(self):
         return self._colorise("h")
@@ -118,8 +125,8 @@ class Knight(Figure):
 
 
 class Queen(Figure):
-    def __init__(self, side: Side):
-        super().__init__(side)
+    def __init__(self, color: Color):
+        super().__init__(color)
 
     def __repr__(self):
         return self._colorise("q")
@@ -132,8 +139,8 @@ class Queen(Figure):
 
 
 class King(Figure):
-    def __init__(self, side: Side):
-        super().__init__(side)
+    def __init__(self, color: Color):
+        super().__init__(color)
 
     def __repr__(self):
         return self._colorise("k")

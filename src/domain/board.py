@@ -1,6 +1,6 @@
 from typing import Optional, Tuple
 from domain.figures import *
-from domain.common import Side
+from domain.common import Color
 
 DEFAULT_WHITE = """
 rhbqkbhr
@@ -26,21 +26,21 @@ rhbkqbhr
 
 
 class Board:
-    def __init__(self, side: Side = Side.WHITE, state=None):
+    def __init__(self, color: Color = Color.WHITE, state=None):
         self._cells = {}
         self._size = (8, 8)
         self.eaten = {
-            side: [],
-            Side.opposite(side): []
+            color: [],
+            Color.opposite(color): []
         }
 
-        self.current_turn = side
-        self.side = side
+        self.current_turn = Color.WHITE
+        self.color = color
 
         if state:
             self.__load_state(state)
         else:
-            if side == Side.WHITE:
+            if color == Color.WHITE:
                 self.__load_state(DEFAULT_WHITE)
             else:
                 self.__load_state(DEFAULT_BLACK)
@@ -68,23 +68,23 @@ class Board:
                 if f == '_':
                     continue
                 if f.isupper():
-                    self.__set((i, j), figure_classes[f.lower()](Side.WHITE))
+                    self.__set((i, j), figure_classes[f.lower()](Color.WHITE))
                 else:
-                    self.__set((i, j), figure_classes[f.lower()](Side.BLACK))
+                    self.__set((i, j), figure_classes[f.lower()](Color.BLACK))
 
     def __set(self, position, figure):
         i, j = position
 
         if i < 0 or i >= self.width or j < 0 or j >= self.height:
-            raise Exception("Outside of field")
+            raise Exception("Outcolor of field")
 
         self._cells[position] = figure
 
     def get_color(self, point):
         if sum(point) % 2 == 0:
-            return Side.WHITE
+            return Color.WHITE
         else:
-            return Side.BLACK
+            return Color.BLACK
 
     def point_available(self, point):
         i, j = point
@@ -94,7 +94,7 @@ class Board:
 
     def get(self, point):
         if not self.point_available(point):
-            raise Exception("Point is outside of filed")
+            return None
         if point in self._cells:
             return self._cells[point]
         else:
@@ -108,7 +108,7 @@ class Board:
         if not figure:
             return False
 
-        if figure.side != self.current_turn:
+        if figure.color != self.current_turn:
             return False
 
         if not figure.can_move(start, end, self):
@@ -119,10 +119,10 @@ class Board:
 
         enemy = self.get(end)
         if enemy:
-            self.eaten[enemy.side].append(enemy)
+            self.eaten[enemy.color].append(enemy)
 
         self.__set(end, figure)
-        self.current_turn = Side.opposite(self.current_turn)
+        self.current_turn = Color.opposite(self.current_turn)
 
         return True
 
@@ -134,6 +134,9 @@ class Board:
                 result += s
             result += '\n'
         return result
+
+    def get_current_turn(self):
+        return self.current_turn
 
     @property
     def width(self):

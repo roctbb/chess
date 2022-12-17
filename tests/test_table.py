@@ -1,10 +1,10 @@
 import pytest
 
-from domain.board import Board, Side
+from domain.board import Board, Color
 
 
 def test_white():
-    board = Board(Side.WHITE)
+    board = Board(Color.WHITE)
 
     expected = """
 rhbqkbhr
@@ -33,7 +33,7 @@ RHBQKBHR
 
 
 def test_black():
-    board = Board(Side.BLACK)
+    board = Board(Color.BLACK)
 
     expected = """
 RHBKQBHR
@@ -60,7 +60,7 @@ rhbkqbhr
         board.get((0, 8))
 
 def test_sequental_moves():
-    board = Board(Side.WHITE)
+    board = Board(Color.WHITE)
     assert board.move((0, 6), (0, 5)) == True
     assert board.move((0, 5), (0, 4)) == False
     assert board.move((0, 1), (0, 2)) == True

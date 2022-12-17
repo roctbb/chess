@@ -1,5 +1,5 @@
 import pytest
-from domain.board import Board, Side
+from domain.board import Board, Color
 
 def test_close():
     initial = """
@@ -13,7 +13,7 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
     assert board.move((0, 3), (0, 4)) == False
 
 def test_dia():
@@ -28,5 +28,5 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
     assert board.move((0, 8), (0, 5)) == True

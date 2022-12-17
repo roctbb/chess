@@ -1,6 +1,6 @@
 import pytest
 
-from domain.board import Board, Side
+from domain.board import Board, Color
 
 
 def test_initial_step():
@@ -15,7 +15,7 @@ PPPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
     board.move((0, 6), (0, 4))
 
     expected = """
@@ -43,11 +43,11 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
     assert board.move((0, 3), (0, 4)) == False
 
 def test_cannot_double_step():
-    board = Board(Side.WHITE)
+    board = Board(Color.WHITE)
     board.move((0, 6), (0, 4))
     assert board.move((0, 4), (0, 2)) == False
 
@@ -63,7 +63,7 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
 
     assert board.move((0, 2), (0, 1)) == False
 
@@ -80,10 +80,10 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
 
     assert board.move((0, 2), (1, 1)) == True
-    assert len(board.eaten[Side.BLACK]) == 1
+    assert len(board.eaten[Color.BLACK]) == 1
 
 def test_can_eat_diag_back():
     initial = """
@@ -97,7 +97,7 @@ _PPPPPPP
 RHBQKBHR
 """
 
-    board = Board(Side.WHITE, initial)
+    board = Board(Color.WHITE, initial)
 
     assert board.move((0, 2), (1, 3)) == True
-    assert len(board.eaten[Side.BLACK]) == 1
+    assert len(board.eaten[Color.BLACK]) == 1

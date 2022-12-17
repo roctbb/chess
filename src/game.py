@@ -1,3 +1,3 @@
-from engines.tkengine import TkGameEngine
+from interface.tkgame import TkGame
 
-TkGameEngine().run()
+TkGame().run()
