@@ -1,6 +1,9 @@
+from domain.common import Color
+from domain.game import Game
 from interface.common import GameEngine
 from interface.styles import DefaultTkBoardStyle
 from domain.board import Board
+from domain.chess.rules import StandardChessRules
 from tkinter import Tk, Canvas
 
 
@@ -10,7 +13,8 @@ class TkGame(GameEngine):
 
     def run(self):
         self.window = Tk()
-        self.board = Board()
+        self.game = Game(StandardChessRules, Color.WHITE)
+        self.board = self.game.board
         self.style = DefaultTkBoardStyle()
         self._active_turn_from = None
         self.window.rowconfigure(0, weight=1)
@@ -36,25 +40,18 @@ class TkGame(GameEngine):
         x, y = event.x, event.y
 
         point = self._find_cell_coordinates(x, y)
-        figure = self.board.get(point)
 
         if not self._active_turn_from:
-            if not figure:
-                return
-
-            if figure.color != self.board.get_current_turn():
-                return
-
-            self._active_turn_from = point
+            if self.game.pick(point):
+                self._active_turn_from = point
         else:
-            self.board.move(self._active_turn_from, point)
-            self._active_turn_from = False
+            self.game.move(self._active_turn_from, point)
+            self._active_turn_from = None
 
         self._clear()
         self._draw_board()
 
     def _draw_board(self):
-        print(self.canvas['width'], self.canvas['height'], self.canvas.winfo_width())
         cell_width = self.canvas.winfo_width() // self.board.width
         cell_height = self.canvas.winfo_height() // self.board.height
 
@@ -64,7 +61,7 @@ class TkGame(GameEngine):
         for i in range(self.board.width):
             for j in range(self.board.width):
                 self.style.draw_cell((cell_width * i, cell_height * j, cell_width, cell_height),
-                                     self.board.get_color((i, j)), self.canvas, self._active_turn_from == (i, j))
+                                     self.board.color_of((i, j)), self.canvas, self._active_turn_from == (i, j))
 
                 if self.board.get((i, j)):
                     self.style.draw_figure((cell_width * i, cell_height * j, cell_width, cell_height),

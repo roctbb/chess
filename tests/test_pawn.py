@@ -1,6 +1,4 @@
-import pytest
-
-from domain.board import Board, Color
+from domain import Board, Color
 
 
 def test_initial_step():

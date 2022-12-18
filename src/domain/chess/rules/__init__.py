@@ -1,0 +1,1 @@
+from .chess_rules import StandardChessRules

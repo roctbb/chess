@@ -1,25 +1,10 @@
-import abc
-from typing import Tuple
-from domain.common import Color
-# from domain.board import Board
-from domain.figures import Figure
+from domain.common import FigureRule, Point, Color
+from domain.board import Board
 
 
-class Rook(Figure):
-
-    LITERAL = 'r'
-
-    # Ладья
-    def __init__(self, color: Color):
-        super().__init__(color)
-
-    def __repr__(self):
-        return self._colorise(Rook.LITERAL)
-
-    def moved(self, start, end, board):
-        pass
-
-    def can_move(self, start, end, board):
+class RookRule(FigureRule):
+    @staticmethod
+    def can_move(start: Point, end: Point, turn: Color, board: Board) -> bool:
         if start[0] == end[0]:
             if start[1] > end[1]:
                 for i in range(end[1] + 1, start[1]):

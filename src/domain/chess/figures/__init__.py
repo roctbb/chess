@@ -3,7 +3,6 @@
 Пакет шахматных фигур
 """
 
-from .figure import Figure
 from .pawn import Pawn
 from .rook import Rook
 from .bishop import Bishop
