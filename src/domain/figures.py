@@ -1,6 +1,7 @@
 import abc
 from typing import Tuple
 from domain.common import Color
+from board import Board
 
 
 class Figure:
@@ -8,10 +9,10 @@ class Figure:
         self.color = color
 
     @abc.abstractmethod
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         raise NotImplementedError
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         pass
 
     @abc.abstractmethod
@@ -23,7 +24,7 @@ class Figure:
             return s.upper()
         return s
 
-    def _direction(self, board):
+    def _direction(self, board: Board):
         if self.color == board.color:
             return -1
         else:
@@ -35,7 +36,7 @@ class Pawn(Figure):
         super().__init__(color)
         self.__is_moved = False
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         direction = self._direction(board)
 
         # прямой ход
@@ -52,15 +53,15 @@ class Pawn(Figure):
 
         return False
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         self.__is_moved = True
 
     def __repr__(self):
-        return self._colorise("p")
+        return self._colorise("p")  # Пешка, вообще говоря, не записывается в нотации)
 
 
 class Rook(Figure):
-    # ЛАДИЯ
+    # Ладья
     def __init__(self, color: Color):
         super().__init__(color)
 
@@ -70,7 +71,7 @@ class Rook(Figure):
     def moved(self, start, end, board):
         pass
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         if start[0] == end[0]:
             if start[1] > end[1]:
                 for i in range(end[1] + 1, start[1]):
@@ -102,25 +103,25 @@ class Bishop(Figure):
     def __repr__(self):
         return self._colorise("b")
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         pass
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         pass
 
 
 class Knight(Figure):
-    # Лошаодь
+    # Конь
     def __init__(self, color: Color):
         super().__init__(color)
 
     def __repr__(self):
-        return self._colorise("h")
+        return self._colorise("n")  # В шахматной нотации Конь это не "Horse", а N, от kNight
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         pass
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         pass
 
 
@@ -131,10 +132,10 @@ class Queen(Figure):
     def __repr__(self):
         return self._colorise("q")
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         pass
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         pass
 
 
@@ -145,8 +146,8 @@ class King(Figure):
     def __repr__(self):
         return self._colorise("k")
 
-    def moved(self, start, end, board):
+    def moved(self, start, end, board: Board):
         pass
 
-    def can_move(self, start, end, board):
+    def can_move(self, start, end, board: Board):
         pass
