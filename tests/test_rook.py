@@ -1,4 +1,5 @@
-from domain import Board, Color
+from domain.board import Board
+from domain.common import Color
 
 def test_close():
     initial = """

@@ -1,30 +1,34 @@
-from domain import Board, Color
+from domain.common import Color
+from domain.board import Board
+from domain.chess.rules import ChessRules
 
 
 def test_initial_step():
     initial = """
-rhbqkbhr
+rnbqkbnr
 pppppppp
 ________
 ________
 ________
 ________
 PPPPPPPP
-RHBQKBHR
+RNBQKBNR
 """
 
-    board = Board(Color.WHITE, initial)
+    board = Board((8, 8), Color.WHITE)
+    board.load_state(initial)
+
     board.move((0, 6), (0, 4))
 
     expected = """
-rhbqkbhr
+rnbqkbnr
 pppppppp
 ________
 ________
 P_______
 ________
 _PPPPPPP
-RHBQKBHR
+RNBQKBNR
 """
 
     assert board.get_state().strip('\n') == expected.strip('\n')

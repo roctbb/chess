@@ -33,6 +33,15 @@ class Board:
                     raise Exception("Incorrect literal in template: " + f)
                 self.set((i, j), figure)
 
+    def get_state(self):
+        result = ""
+        for j in range(self.height):
+            for i in range(self.width):
+                s = '_' if not self.get((i, j)) else str(self.get((i, j)))
+                result += s
+            result += '\n'
+        return result
+
     @property
     def width(self) -> int:
         return self._size[0]

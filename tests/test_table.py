@@ -1,6 +1,6 @@
 import pytest
-
-from domain import Board, Color
+from domain.common import Color
+from domain.board import Board
 
 
 def test_white():
