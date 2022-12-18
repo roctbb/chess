@@ -36,7 +36,7 @@ class DefaultTkBoardStyle(TkBoardStyle):
             color = "white"
         else:
             color = "black"
-        canvas.create_rectangle(x, y, x + width, y + height, fill=color)
+        return canvas.create_rectangle(x, y, x + width, y + height, fill=color)
 
     def draw_figure(self, rect, figure: Figure, canvas):
         x, y, width, height = rect
@@ -48,4 +48,4 @@ class DefaultTkBoardStyle(TkBoardStyle):
 
         image = self._images[s].resize((width, height), Image.LANCZOS)
         self._cache[(x, y)] = ImageTk.PhotoImage(image)
-        canvas.create_image(x, y, image=self._cache[(x, y)], anchor="nw")
+        return canvas.create_image(x, y, image=self._cache[(x, y)], anchor="nw")

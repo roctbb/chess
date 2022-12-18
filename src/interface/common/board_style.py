@@ -1,14 +1,5 @@
 import abc
 
-
-class GameEngine:
-    def __init__(self):
-        pass
-
-    @abc.abstractmethod
-    def run(self):
-        raise NotImplementedError
-
 class TkBoardStyle:
     def __init__(self):
         pass

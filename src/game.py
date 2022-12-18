@@ -6,6 +6,6 @@ sys.path.append(__path__)
 
 print(__path__)
 
-from interface.tkgame import TkGame
+from tkgame import TkGame
 
 TkGame().run()
