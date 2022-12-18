@@ -1,6 +1,7 @@
-from domain.common import FigureRule, Point, Color
-from domain.board import Board
 from typing import List
+
+from domain.board import Board
+from domain.common import FigureRule, Point, Color
 
 
 class QueenRule(FigureRule):

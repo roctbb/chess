@@ -1,11 +1,9 @@
-import abc
-
 class TkBoardStyle:
     def __init__(self):
         pass
 
     @staticmethod
-    def draw_cell(rect, color, canvas):
+    def draw_cell(rect, color, canvas, active):
         raise NotImplementedError
 
     @staticmethod

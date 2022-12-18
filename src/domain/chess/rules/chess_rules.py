@@ -1,8 +1,9 @@
+from typing import List
+
 from domain.board import Board
-from domain.common import GameRules, Point, Color
 from domain.chess.figures import *
 from domain.chess.rules.figure_rules import *
-from typing import List
+from domain.common import GameRules, Point, Color
 
 DEFAULT_WHITE = """
 rnbqkbnr
@@ -108,5 +109,5 @@ class ChessRules(GameRules):
         return (8, 8)
 
     @classmethod
-    def is_over(turn: Color, board: Board):
+    def is_over(cls, color: Color, board: Board):
         raise NotImplementedError

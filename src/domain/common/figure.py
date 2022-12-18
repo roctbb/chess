@@ -1,7 +1,7 @@
-import abc
-from typing import Tuple, Optional
-from domain.common import Color
+from typing import Optional
 from typing import TypeVar
+
+from domain.common import Color
 
 TFigure = TypeVar("TFigure", bound="Figure")
 
@@ -15,10 +15,10 @@ class Figure:
     def __str__(self):
         return self._colorise(self.LITERAL)
 
-    def _colorise(self, s):
+    def _colorise(self, literal):
         if self.color == Color.WHITE:
-            return s.upper()
-        return s
+            return literal.upper()
+        return literal
 
     @staticmethod
     def _color_for_literal(literal: str) -> Color:

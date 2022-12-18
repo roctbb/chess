@@ -1,13 +1,15 @@
 from tkinter import Canvas
-from domain.chess.figures import Pawn, Rook, Bishop, Knight, Queen, King
-from interface.common import TkBoardStyle
-from domain.common import Color, Figure
+
 from PIL import Image, ImageTk
+
+from domain.chess.figures import Pawn, Rook, Bishop, Knight, Queen, King
+from domain.common import Color, Figure
+from interface.common import TkBoardStyle
+
 
 class DefaultTkBoardStyle(TkBoardStyle):
     def __init__(self):
         super().__init__()
-
 
         self._images = {
             # @TODO: Вот эту сранину надо как-то изящнее сделать:
@@ -25,7 +27,6 @@ class DefaultTkBoardStyle(TkBoardStyle):
             Pawn(Color.WHITE).__str__(): Image.open("./assets/default/white_pawn.png")
         }
         self._cache = {}
-
 
     def draw_cell(self, rect, color, canvas: Canvas, active=False):
         x, y, width, height = rect

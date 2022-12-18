@@ -1,11 +1,12 @@
-from domain.common import Color
+from tkinter import Tk, Canvas
+
 from domain.chess.game import ChessGame
+from domain.chess.players import GuiPlayer
+from domain.chess.rules import ChessRules
+from domain.common import Color
 from interface.common import GameEngine
 from interface.styles import DefaultTkBoardStyle
-from domain.chess.rules import ChessRules
-from tkinter import Tk, Canvas
 from interface.widgets import BoardWidget
-from domain.chess.players import DummyPlayer, GuiPlayer
 
 
 class TkGame(GameEngine):
@@ -13,6 +14,11 @@ class TkGame(GameEngine):
         super().__init__()
         self._width = 640
         self._height = 640
+        self.window = None
+        self.canvas = None
+        self.board_widget = None
+        self.players = []
+        self.game = None
 
     def __create_window(self):
         self.window = Tk()
@@ -23,19 +29,22 @@ class TkGame(GameEngine):
         self.window.bind("<Configure>", self._window_resized)
 
     def __initiate_widgets(self):
-        self.board_widget = BoardWidget(self.game.board, (0, 0), (self._width , self._height), DefaultTkBoardStyle(),
+        self.board_widget = BoardWidget(self.game.board, (0, 0),
+                                        (self._width, self._height),
+                                        DefaultTkBoardStyle(),
                                         self.canvas)
-        self.board_widget.subscribe(self.player1)
-        self.board_widget.subscribe(self.player2)
+        for player in self.players:
+            self.board_widget.subscribe(player)
 
     def run(self):
         self.__create_window()
 
         self.game = ChessGame(ChessRules, Color.WHITE)
-        self.player1 = GuiPlayer(self.game, Color.WHITE)
-        self.player2 = GuiPlayer(self.game, Color.BLACK)
+        self.players.append(GuiPlayer(self.game, Color.WHITE))
+        self.players.append(GuiPlayer(self.game, Color.BLACK))
 
         self.__initiate_widgets()
+
         self.window.mainloop()
 
     def _window_resized(self, event):
