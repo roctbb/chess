@@ -1,27 +1,31 @@
 from typing import Optional, Tuple
-from domain.figures import *
+# Вот тут, как мне кажется, поплыло разделение ответственности классов: с какой стати доска что-то "знает" о фигурах?
+# А если мы этот класс переделаем под нарды или шашки, то что будет? А будет нарушение базового принципа
+# "можно добавлять класс, нельзя изменять класс".
+from domain.figures import (Pawn, Rook, Bishop, Knight, Queen, King)
+
 from domain.common import Color
 
 DEFAULT_WHITE = """
-rhbqkbhr
+rnbqkbnr
 pppppppp
 ________
 ________
 ________
 ________
 PPPPPPPP
-RHBQKBHR
+RNBQKBNR
 """
 
 DEFAULT_BLACK = """
-RHBKQBHR
+RNBKQBNR
 PPPPPPPP
 ________
 ________
 ________
 ________
 pppppppp
-rhbkqbhr
+rnbkqbnr
 """
 
 
@@ -54,12 +58,14 @@ class Board:
 
         figure_classes = {
             "r": Rook,
-            "h": Knight,
+            "n": Knight,
             "b": Bishop,
             "k": King,
             "q": Queen,
             "p": Pawn
         }
+
+        # Figure.get_figure_by_literal('r', Color.WHITE)
 
         for j in range(len(rows)):
             row = rows[j]
