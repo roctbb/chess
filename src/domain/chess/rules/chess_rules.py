@@ -3,7 +3,8 @@ from typing import List
 from domain.board import Board
 from domain.chess.figures import *
 from domain.chess.rules.figure_rules import *
-from domain.common import GameRules, Point, Color
+from domain.common import Point, Color
+from domain.rules import GameRules
 
 DEFAULT_WHITE = """
 rnbqkbnr

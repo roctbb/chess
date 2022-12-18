@@ -1,5 +1,5 @@
-from domain.game import Game
 from domain.common import Color, Point
+from domain.game import Game
 
 
 class Player:

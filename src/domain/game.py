@@ -1,6 +1,8 @@
-from domain.board import Board, ImmutableBoard
-from domain.common import GameRules, Color, Point
 from typing import Type, List
+
+from domain.board import Board, ImmutableBoard
+from domain.common import Point, Color
+from domain.rules import GameRules
 
 
 class Game:

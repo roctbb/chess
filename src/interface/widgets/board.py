@@ -1,7 +1,9 @@
-from domain.board import ImmutableBoard
-from domain.common import Point, Player
-from interface.common import Widget
 from tkinter import Canvas
+
+from domain.board import ImmutableBoard
+from domain.common import Point
+from domain.player import Player
+from interface.common import Widget
 from interface.styles import DefaultTkBoardStyle
 
 

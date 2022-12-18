@@ -1,4 +1,5 @@
-from domain.common import Player, Color
+from domain.common import Color
+from domain.player import Player
 
 
 class DummyPlayer(Player):

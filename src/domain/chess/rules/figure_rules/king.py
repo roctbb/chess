@@ -1,7 +1,8 @@
 from typing import List
 
 from domain.board import Board
-from domain.common import FigureRule, Point, Color
+from domain.common import Point, Color
+from domain.rules import FigureRule
 
 
 class KingRule(FigureRule):

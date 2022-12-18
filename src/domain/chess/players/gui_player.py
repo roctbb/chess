@@ -1,5 +1,6 @@
+from domain.common import Color, Point
 from domain.game import Game
-from domain.common import Player, Color, Point
+from domain.player import Player
 
 
 class GuiPlayer(Player):
