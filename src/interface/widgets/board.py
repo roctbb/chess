@@ -1,5 +1,5 @@
 from domain.board import ImmutableBoard
-from domain.common import Point
+from domain.common import Point, Player
 from interface.common import Widget
 from tkinter import Canvas
 from interface.styles import DefaultTkBoardStyle
@@ -12,7 +12,7 @@ class BoardWidget(Widget):
         self._board = board
         self._active_turn_from = None
         self._style = style
-        self._select_callback = None
+        self._select_callbacks = []
 
     def draw(self):
         cell_width = self._width // self._board.width
@@ -43,7 +43,7 @@ class BoardWidget(Widget):
         self.redraw()
 
     def on_select(self, callback):
-        self._select_callback = callback
+        self._select_callbacks.append(callback)
 
     def __find_cell_coordinates(self, point):
         x, y = point
@@ -58,5 +58,10 @@ class BoardWidget(Widget):
     def _click(self, point: Point):
         i, j = self.__find_cell_coordinates(point)
 
-        if self._select_callback:
-            self._select_callback((i, j))
+        for callback in self._select_callbacks:
+            callback((i, j))
+
+    def subscribe(self, player: Player):
+        self.on_select(player.pick)
+        player.on_pick(self.pick)
+        player.on_unpick(self.unpick)

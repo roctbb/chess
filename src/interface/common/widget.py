@@ -35,7 +35,6 @@ class Widget:
         raise NotImplementedError
 
     def redraw(self):
-
         self.clear()
         self.draw()
 
