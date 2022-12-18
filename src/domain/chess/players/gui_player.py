@@ -9,7 +9,7 @@ class GuiPlayer(Player):
         self._pick_callback = None
         self._unpick_callback = None
 
-    def turn(self):
+    def make_turn(self):
         pass
 
     def pick(self, point: Point):
@@ -24,7 +24,7 @@ class GuiPlayer(Player):
                     if self._pick_callback:
                         self._pick_callback(point)
             else:
-                self._game.move(self._turn_from, point)
+                self._game.move([self._turn_from, point])
                 self._turn_from = None
 
     def on_pick(self, callback):

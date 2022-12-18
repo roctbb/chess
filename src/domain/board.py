@@ -3,7 +3,7 @@
 # "можно добавлять класс, нельзя изменять класс".
 from domain.common import Color, Point
 from domain.common import Figure
-from typing import Optional
+from typing import Optional, List
 
 
 class Board:
@@ -11,11 +11,6 @@ class Board:
         self._cells = {}
         self._size = size
         self._orientation = orientation
-
-        self._eaten = {
-            Color.WHITE: [],
-            Color.BLACK: []
-        }
 
     def load_state(self, state: str):
         rows = state.strip('\n').split()
@@ -67,7 +62,8 @@ class Board:
         else:
             return None
 
-    def move(self, start: Point, end: Point) -> bool:
+    def move(self, start, end) -> bool:
+
         if not self._point_available(start) or not self._point_available(end):
             return False
 
@@ -76,11 +72,6 @@ class Board:
             return False
 
         self.set(start, None)
-
-        enemy = self.get(end)
-        if enemy:
-            self._eaten[enemy.color].append(enemy)
-
         self.set(end, figure)
 
         return True
@@ -97,9 +88,6 @@ class Board:
             return False
         return True
 
-    def get_eaten_by(self, color: Color) -> tuple:
-        return tuple(self._eaten[color])
-
     def clear(self):
         self._cells = {}
 
@@ -113,9 +101,6 @@ class ImmutableBoard:
 
     def color_of(self, point: Point) -> Color:
         return self._board.color_of(point)
-
-    def get_eaten_by(self, color: Color) -> tuple:
-        return tuple(self._board.get_eaten_by(color))
 
     @property
     def width(self) -> int:

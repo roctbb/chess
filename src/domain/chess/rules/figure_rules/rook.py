@@ -1,10 +1,12 @@
 from domain.common import FigureRule, Point, Color
 from domain.board import Board
+from typing import List
 
 
 class RookRule(FigureRule):
     @staticmethod
-    def can_move(start: Point, end: Point, turn: Color, board: Board) -> bool:
+    def can_move(points: List[Point], turn: Color, board: Board) -> bool:
+        start, end = points
         if start[0] == end[0]:
             if start[1] > end[1]:
                 for i in range(end[1] + 1, start[1]):

@@ -12,9 +12,8 @@ class Figure:
     def __init__(self, color: Color):
         self.color = color
 
-    @abc.abstractmethod
     def __str__(self):
-        raise NotImplementedError
+        return self._colorise(self.LITERAL)
 
     def _colorise(self, s):
         if self.color == Color.WHITE:

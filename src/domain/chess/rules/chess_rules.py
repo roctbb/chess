@@ -2,6 +2,7 @@ from domain.board import Board
 from domain.common import GameRules, Point, Color
 from domain.chess.figures import *
 from domain.chess.rules.figure_rules import *
+from typing import List
 
 DEFAULT_WHITE = """
 rnbqkbnr
@@ -26,7 +27,7 @@ rnbkqbnr
 """
 
 
-class StandardChessRules(GameRules):
+class ChessRules(GameRules):
     DEFAULT_PLACEMENT = {
         Color.WHITE: DEFAULT_WHITE,
         Color.BLACK: DEFAULT_BLACK
@@ -41,8 +42,6 @@ class StandardChessRules(GameRules):
         Queen.LITERAL: QueenRule
     }
 
-
-
     @staticmethod
     def can_pick(point: Point, turn: Color, board: Board) -> bool:
         figure = board.get(point)
@@ -54,8 +53,26 @@ class StandardChessRules(GameRules):
 
         return True
 
+    @staticmethod
+    def attacked(points: List[Point], turn: Color, board: Board) -> List[Point]:
+        answer = []
+
+        if board.get(points[-1]):
+            answer.append(points[-1])
+
+        return answer
+
+    @staticmethod
+    def moved(points: List[Point], turn: Color, board: Board) -> None:
+        pass
+
     @classmethod
-    def can_move(cls, start: Point, end: Point, turn: Color, board: Board) -> bool:
+    def can_move(cls, points: List[Point], turn: Color, board: Board) -> bool:
+        if len(points) != 2:
+            return False
+
+        start = points[0]
+        end = points[1]
         if not cls.can_pick(start, turn, board):
             return False
 
@@ -63,7 +80,7 @@ class StandardChessRules(GameRules):
         if not rule:
             raise Exception("Rule for figure not found")
 
-        if rule.can_move(start, end, turn, board):
+        if rule.can_move([start, end], turn, board):
             return True
 
         return False
@@ -73,6 +90,14 @@ class StandardChessRules(GameRules):
         if color not in cls.DEFAULT_PLACEMENT:
             raise Exception("No placement for color")
         board.load_state(cls.DEFAULT_PLACEMENT[color])
+
+    @classmethod
+    def check(cls, board: Board, color: Color):
+        raise NotImplementedError
+
+    @classmethod
+    def mate(cls, board: Board, color: Color):
+        raise NotImplementedError
 
     @classmethod
     def get_first_turn(cls):

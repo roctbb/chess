@@ -1,1 +1,1 @@
-from .chess_rules import StandardChessRules
+from .chess_rules import ChessRules

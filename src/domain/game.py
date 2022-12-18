@@ -1,6 +1,6 @@
 from domain.board import Board, ImmutableBoard
 from domain.common import GameRules, Color, Point
-from typing import Type
+from typing import Type, List
 
 
 class Game:
@@ -11,6 +11,11 @@ class Game:
         self._turn = rules.get_first_turn()
         self.__turn_callbacks = []
 
+        self._eaten = {
+            Color.WHITE: [],
+            Color.BLACK: []
+        }
+
         self._rules.place_figures(self._board, self._side)
 
     def pick(self, point: Point) -> bool:
@@ -18,11 +23,20 @@ class Game:
             return True
         return False
 
-    def move(self, start: Point, end: Point) -> bool:
-        if self._rules.can_move(start, end, self._turn, self._board):
-            self._board.move(start, end)
-            self._turn = Color.opposite(self._turn)
+    def move(self, points: List[Point]) -> bool:
+        if self._rules.can_move(points, self._turn, self._board):
+            eaten = self._rules.attacked(points, self._turn, self._board)
 
+            for point in eaten:
+                self._eaten[Color.opposite(self._turn)].append(self._board.get(point))
+                self._board.set(point, None)
+
+            print(self._eaten)
+
+            self._board.move(points[0], points[-1])
+            self._rules.moved(points, self._turn, self._board)
+
+            self._turn = Color.opposite(self._turn)
             for callback in self.__turn_callbacks:
                 callback()
 
@@ -34,6 +48,9 @@ class Game:
 
     def on_turn(self, callback):
         self.__turn_callbacks.append(callback)
+
+    def get_eaten_by(self, color: Color) -> tuple:
+        return tuple(self._eaten[color])
 
     @property
     def board(self):

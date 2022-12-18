@@ -1,5 +1,5 @@
 import abc
-
+from typing import List
 from domain.common import Point, Color
 from domain.board import Board
 
@@ -7,12 +7,11 @@ from domain.board import Board
 class FigureRule:
     @staticmethod
     @abc.abstractmethod
-    def can_move(start: Point, end: Point, turn: Color, board: Board) -> bool:
+    def can_move(points: List[Point], turn: Color, board: Board) -> bool:
         raise NotImplementedError
 
 
 class GameRules:
-
     @staticmethod
     @abc.abstractmethod
     def can_pick(point: Point, turn: Color, board: Board) -> bool:
@@ -20,12 +19,17 @@ class GameRules:
 
     @staticmethod
     @abc.abstractmethod
-    def can_move(start: Point, end: Point, turn: Color, board: Board) -> bool:
+    def can_move(points: List[Point], turn: Color, board: Board) -> bool:
         raise NotImplementedError
 
     @staticmethod
     @abc.abstractmethod
-    def moved(start: Point, end: Point, turn: Color, board: Board) -> bool:
+    def attacked(points: List[Point], turn: Color, board: Board) -> List[Point]:
+        raise NotImplementedError
+
+    @staticmethod
+    @abc.abstractmethod
+    def moved(points: List[Point], turn: Color, board: Board) -> None:
         raise NotImplementedError
 
     @staticmethod

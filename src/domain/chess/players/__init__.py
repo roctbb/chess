@@ -1,2 +1,2 @@
 from .dummy import DummyPlayer
-from .gui import GuiPlayer
+from .gui_player import GuiPlayer
