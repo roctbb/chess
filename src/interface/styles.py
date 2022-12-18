@@ -1,6 +1,6 @@
 from tkinter import Canvas
 
-from domain.figures import Figure
+from domain.figures import (Figure, Pawn, Rook, Bishop, Knight, Queen, King)
 from interface.common import TkBoardStyle
 from domain.common import Color
 from PIL import Image, ImageTk
@@ -9,19 +9,21 @@ class DefaultTkBoardStyle(TkBoardStyle):
     def __init__(self):
         super().__init__()
 
+
         self._images = {
-            'b': Image.open("./assets/default/black_bishop.png"),
-            'r': Image.open("./assets/default/black_rook.png"),
-            'h': Image.open("./assets/default/black_knight.png"),
-            'k': Image.open("./assets/default/black_king.png"),
-            'q': Image.open("./assets/default/black_queen.png"),
-            'p': Image.open("./assets/default/black_pawn.png"),
-            'B': Image.open("./assets/default/white_bishop.png"),
-            'R': Image.open("./assets/default/white_rook.png"),
-            'H': Image.open("./assets/default/white_knight.png"),
-            'K': Image.open("./assets/default/white_king.png"),
-            'Q': Image.open("./assets/default/white_queen.png"),
-            'P': Image.open("./assets/default/white_pawn.png")
+            # @TODO: Вот эту сранину надо как-то изящнее сделать:
+            Bishop(Color.BLACK).__repr__(): Image.open("./assets/default/black_bishop.png"),
+            Rook(Color.BLACK).__repr__(): Image.open("./assets/default/black_rook.png"),
+            Knight(Color.BLACK).__repr__(): Image.open("./assets/default/black_knight.png"),
+            King(Color.BLACK).__repr__(): Image.open("./assets/default/black_king.png"),
+            Queen(Color.BLACK).__repr__(): Image.open("./assets/default/black_queen.png"),
+            Pawn(Color.BLACK).__repr__(): Image.open("./assets/default/black_pawn.png"),
+            Bishop(Color.WHITE).__repr__(): Image.open("./assets/default/white_bishop.png"),
+            Rook(Color.WHITE).__repr__(): Image.open("./assets/default/white_rook.png"),
+            Knight(Color.WHITE).__repr__(): Image.open("./assets/default/white_knight.png"),
+            King(Color.WHITE).__repr__(): Image.open("./assets/default/white_king.png"),
+            Queen(Color.WHITE).__repr__(): Image.open("./assets/default/white_queen.png"),
+            Pawn(Color.WHITE).__repr__(): Image.open("./assets/default/white_pawn.png")
         }
         self._cache = {}
 
