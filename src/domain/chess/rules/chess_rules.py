@@ -78,6 +78,9 @@ class ChessRules(GameRules):
         if not cls.can_pick(start, turn, board):
             return False
 
+        if board.get(end) and board.get(end).color == board.get(start).color:
+            return False
+
         rule = cls._rules.get(board.get(start).LITERAL)
         if not rule:
             raise Exception("Rule for figure not found")
